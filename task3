@@ -7,7 +7,6 @@ sed -i -- 's/nginx/Google Cloud Platform - '"\$HOSTNAME"'/' /var/www/html/index.
 EOF
 gcloud compute instance-templates create web-server-template \
           --metadata-from-file startup-script=startup.sh \
-          --network nucleus-vpc \
           --machine-type g1-small \
           --region us-east1
 gcloud compute instance-groups managed create web-server-group \
@@ -16,8 +15,7 @@ gcloud compute instance-groups managed create web-server-group \
           --template web-server-template \
           --region us-east1
 gcloud compute firewall-rules create $FIREWALL_RULE_NAME \
-          --allow tcp:80 \
-          --network nucleus-vpc
+          --allow tcp:80
 gcloud compute http-health-checks create http-basic-check
 gcloud compute instance-groups managed \
           set-named-ports web-server-group \
